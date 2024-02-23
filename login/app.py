@@ -24,7 +24,7 @@ def login():
     if user_data.empty or user_data.iloc[0]['password'] != password:
         return render_template('login.html', message='Invalid email or password. Please try again.')
 
-    return render_template('dashboard.html', user=user_data.iloc[0])
+    return redirect(url_for('homepage'))  # Redirect to homepage after successful login
 
 @app.route('/signup')
 def signup():
@@ -48,7 +48,11 @@ def signup_process():
     # Update the Excel file
     df.to_excel(excel_file_path, index=False)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('homepage'))  # Redirect to homepage after successful signup
+
+@app.route('/homepage')
+def homepage():
+    return render_template('homepage.html')
 
 if __name__ == '__main__':
     # Run the Flask app on port 5001
