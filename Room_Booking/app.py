@@ -4,7 +4,7 @@ import pandas as pd
 app = Flask(__name__, static_url_path='/static')
 
 # Read the Excel file
-rooms_data = pd.read_excel("Room_Booking\\rooms.xlsx")
+rooms_data = pd.read_excel("rooms.xlsx")
 
 @app.route("/")
 def index():
