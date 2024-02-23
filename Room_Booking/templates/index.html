@@ -13,6 +13,7 @@
             background-image: url('Room_Booking/static/class.jpg');
             background-size: cover;
             background-position: center;
+            position: relative;
         }
 
         h1 {
@@ -69,17 +70,24 @@
             text-align: center;
             transition: all 1s;
             z-index: 1;
+            font-size: 40px;
         }
 
         .bok:hover {
-            font-size: 38px;
+            font-size: 46px;
         }
 
         #bookingForm {
-            position: relative;
-            z-index: 1;
-        }
+        position: relative;
+        z-index: 1;
+        padding: 50px; /* Adjust the overall padding of the form */
+    }
 
+    /* Adjust padding for elements inside the booking form */
+    #bookingForm select,
+    #bookingForm input[type="time"]{
+        padding: 20px; /* Adjust as needed */
+    }
         /* Popup container */
         .popup-container {
             display: none;
@@ -146,19 +154,19 @@
 <body>
     <h1 class="bok">Book your classroom</h1>
     <form id="bookingForm">
-        <label for="floor">Choose a floor:</label>
+        <label for="floor"><b>Choose a floor:</b></label>
         <select id="floor" name="floor">
             {% for floor in floors %}
             <option value="{{ floor }}">Floor {{ floor }}</option>
             {% endfor %}
         </select>
-        <label for="room">Choose a room:</label>
+        <label for="room"><b>Choose a room:</b></label>
         <select id="room" name="room">
             <!-- Options will be filled dynamically using JavaScript -->
         </select>
-        <label for="time_from">Choose a time from:</label>
+        <label for="time_from"><b>Choose a time from:</b></label>
         <input type="time" id="time_from" name="time_from">
-        <label for="time_to">Choose a time to:</label>
+        <label for="time_to"><b>Choose a time to:</b></label>
         <input type="time" id="time_to" name="time_to">
         <button type="button" id="checkAvailability">Check Availability</button>
         <button type="button" id="bookRoom">Book Room</button>
