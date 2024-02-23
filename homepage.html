@@ -41,6 +41,24 @@
             text-align: center;
             margin-top: 50px;
         }
+        img{
+            width:100%;
+        }
+        .image-container {
+            position: relative;
+            text-align: center;
+            color: white; /* Text color */
+        }
+        .overlay-text {
+            position: absolute;
+            top: 10px; /* Adjust as needed, in this case, it's positioned 10 pixels from the top */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%);
+            font-size: 24px; /* Adjust the font size */
+            font-weight: bold; /* Optional: Adjust font weight */
+            padding-top: 70px;
+            font-size: 50px;
+        }
     </style>
 </head>
 <body>
@@ -50,13 +68,21 @@
             <a href="http://127.0.0.1:5000" class="button">BOOK A CLASSROOM</a>
             <a href="http://localhost:3000" class="button">COMPLAINTS</a>
             <a href="lost_and_found\lost and found.html" class="button">LOST AND FOUND</a>
-            <a href="#" class="button">Button 4</a>
+            <a href="http://localhost:3001" class="button">Book Reservation</a>
             <a href="http://127.0.0.1:5001" class="button">SIGN UP/LOGIN</a>
         </div>
     </div>
 
     <div class="center-text">
         <h2>WELCOME TO PSG ASSISTS</h2>
+    </div>
+    <div class="image-container">
+        <!-- Image -->
+        <img src="https://c8.alamy.com/comp/GNDXBM/university-cartoon-with-green-gress-background-GNDXBM.jpg" alt="University Cartoon Image">
+        
+        <!-- Text -->
+        <br>
+        <div class="overlay-text">WELCOME TO PSG ASSISTS</div>
     </div>
 </body>
 </html>
