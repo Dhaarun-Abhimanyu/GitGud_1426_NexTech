@@ -1,9 +1,13 @@
 # NexTech
 NexTexh hackathon files
 
-Run homepage.html
-Before that, run node app.js in IT_nonIT_support,server.js in library access, and python app.py in Room_Booking directory
-(Note, the login page isnt fully functional, but to test that, you'll have to run app.py in login directory)
+Steps to run the website:
+Run the app.py in the login folder (do not run form vscode)
+Before running app.py run the following files:
+*app.js from the IT_nonIT_support folder using "node app.js"
+*server.js from the library_acces folder using "node server.js"
+*server.js from the lost_and_found folder using "node server.js"
+*app.py from the Room_Booking folder using "py app.py"
 
 The support functionality:
 dependencies - node, express, ejs, mongodb, etc

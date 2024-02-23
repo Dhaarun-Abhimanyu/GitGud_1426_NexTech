@@ -1,18 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
-const port = 3000;
+const port = 4000;
 
-// In-memory data store (replace this with a proper database in a production environment)
+// In-memory data store for found items
 const foundItems = [];
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// Middleware to parse JSON and urlencoded request bodies
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route to get all found items
 app.get('/api/foundItems', (req, res) => {
     res.json(foundItems);
 });
 
+// Route to report a lost item
 app.post('/api/reportLostItem', (req, res) => {
     const { itemName, description } = req.body;
     foundItems.push({ itemName, description, status: 'Pending' });
@@ -20,6 +27,12 @@ app.post('/api/reportLostItem', (req, res) => {
     res.send('Item reported as lost.');
 });
 
+// Route handler for the root path
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'lost and found.html')); // Send the HTML file
+});
+
+// Start the server
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });

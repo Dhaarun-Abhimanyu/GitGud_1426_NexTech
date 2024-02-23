@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,send_from_directory
 import pandas as pd
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_url_path='')
 
 # Path to the Excel file
-excel_file_path = "excel\\testdata.xlsx"
+excel_file_path = "testdata.xlsx"
 
 # Load the Excel file into a Pandas DataFrame
 df = pd.read_excel(excel_file_path)
@@ -52,7 +52,7 @@ def signup_process():
 
 @app.route('/homepage')
 def homepage():
-    return render_template('homepage.html')
+    return send_from_directory('static', 'homepage.html')
 
 if __name__ == '__main__':
     # Run the Flask app on port 5001
