@@ -95,7 +95,7 @@ app.post('/update-status/:id', async (req, res) => {
   if (status === 'Solved') {
       // If the status is updated to 'Solved', reset relevant fields to empty values
       await Problem.findByIdAndUpdate(id, {
-          status,
+          status : '',
           type: '',
           location: '',
           description: ''
