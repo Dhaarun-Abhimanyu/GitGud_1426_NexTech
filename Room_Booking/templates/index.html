@@ -6,18 +6,14 @@
     <title>Room Booking</title>
     <style>
         /* styles.css */
-
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('Room_Booking/templates/class.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            height: 100vh; /* Set the body height to fill the viewport */
-        }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('class.jpg'); /* Add this line */
+    background-size: cover; /* Ensure the image covers the entire background */
+    background-position: center; /* Center the background image */
+}
 
         h1 {
             color: #333;
@@ -73,6 +69,14 @@
             text-align: center;
             transition: all 1s;
             z-index: 1;
+        }
+        img{
+            width:100%;
+        }
+        .image-container {
+            position: relative;
+            text-align: center;
+            color: rgb(19, 18, 18); /* Text color */
         }
 
         .bok:hover {
@@ -182,6 +186,7 @@
             <!-- Booked rooms will be added dynamically using JavaScript -->
         </ul>
     </div>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
