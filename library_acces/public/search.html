@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Availability</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .reserve-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .reserve-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Library Book Availability</h1>
+    
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Search for books...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="searchResults"></div>
+    <div id="reservationMessage"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+            var searchQuery = document.getElementById("searchInput").value;
+            searchBooks(searchQuery);
+        });
+
+        function searchBooks(query) {
+            fetch('data.xlsx')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.arrayBuffer();
+                })
+                .then(data => {
+                    var workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                    var sheetName = workbook.SheetNames[0];
+                    var sheet = workbook.Sheets[sheetName];
+                    var books = XLSX.utils.sheet_to_json(sheet);
+
+                    var selectedBook = books.find(book => book.Title.toLowerCase() === query.toLowerCase());
+                    if (selectedBook) {
+                        displayBooks([selectedBook]);
+                    } else {
+                        console.error('Book not found');
+                        // Handle error, show error message, etc.
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    // Handle error, show error message, etc.
+                });
+        }
+
+        function displayBooks(books) {
+            var resultsContainer = document.getElementById("searchResults");
+            resultsContainer.innerHTML = ""; // Clear previous results
+
+            var table = document.createElement("table");
+            var headerRow = table.insertRow();
+            var headers = ["ID", "Title", "Author", "Count", "Availability", "Action"];
+            headers.forEach(function(header) {
+                var th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            books.forEach(function(book) {
+                var row = table.insertRow();
+                var idCell = row.insertCell();
+                idCell.textContent = book.ID;
+                var titleCell = row.insertCell();
+                titleCell.textContent = book.Title;
+                var authorCell = row.insertCell();
+                authorCell.textContent = book.Author;
+                var countCell = row.insertCell();
+                countCell.textContent = book.Count;
+                var availabilityCell = row.insertCell();
+                availabilityCell.textContent = book.Count === 0 ? "Unavailable" : "Available";
+                var actionCell = row.insertCell();
+                if (book.Count > 0) {
+                    var reserveButton = document.createElement("button");
+                    reserveButton.textContent = "Reserve";
+                    reserveButton.className = "reserve-button";
+                    reserveButton.addEventListener("click", function() {
+                        reserveBook(book.ID);
+                    });
+                    actionCell.appendChild(reserveButton);
+                } else {
+                    actionCell.textContent = "Not available";
+                }
+            });
+
+            resultsContainer.appendChild(table);
+        }
+
+        function reserveBook(bookId) {
+            // Fetch data from data.xlsx
+            fetch('data.xlsx')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.arrayBuffer();
+                })
+                .then(data => {
+                    var workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                    var sheetName = workbook.SheetNames[0];
+                    var sheet = workbook.Sheets[sheetName];
+                    var books = XLSX.utils.sheet_to_json(sheet);
+
+                    // Find the book with the matching ID
+                    var book = books.find(b => b.ID === bookId);
+                    if (!book) {
+                        throw new Error('Book not found');
+                    }
+
+                    // Update count in the data.xlsx file
+                    updateCountInExcelFile(bookId);
+
+                    // Display confirmation message
+                    console.log('Book reserved successfully');
+                    document.getElementById("reservationMessage").textContent = "Book reserved successfully";
+
+                    // Reset UI to initial stage after a delay
+                    setTimeout(() => {
+                        document.getElementById("reservationMessage").textContent = ""; // Clear message
+                        document.getElementById("searchForm").reset(); // Reset search form
+                        document.getElementById("searchResults").innerHTML = ""; // Clear search results
+                    }, 2000); // 2000 milliseconds = 2 seconds, adjust as needed
+                })
+                .catch(error => {
+                    console.error('Error reserving book:', error);
+                    // Handle error, show error message, etc.
+                });
+        }
+        const xlsxPopulate = require('xlsx-populate');
+        function updateCountInExcelFile(bookId) {
+            xlsxPopulate.fromFileAsync('data.xlsx')
+                .then(workbook => {
+                    const sheet = workbook.sheet(0);
+                    const bookRow = sheet.findFirstRow(book => book.cell('A').value() === bookId);
+
+                    if (bookRow) {
+                        const countCell = bookRow.cell('D');
+                        let count = countCell.value();
+                        if (count > 0) {
+                            countCell.value(count - 1);
+                            if (count - 1 === 0) {
+                                bookRow.cell('E').value(false); // Set availability to false
+                            }
+                            return workbook.toFileAsync('data.xlsx');
+                        }
+                    }
+                    throw new Error('Book not found or not available');
+                })
+                .catch(error => {
+                    console.error('Error updating count in Excel file:', error);
+                    // Handle error, show error message, etc.
+                });
+        }
+    </script>
+</body>
+</html>
