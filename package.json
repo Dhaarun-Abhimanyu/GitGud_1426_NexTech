@@ -1,7 +1,24 @@
 {
+<<<<<<< HEAD
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "xlsx-populate": "^1.21.0"
+=======
+  "name": "nextech",
+  "version": "1.0.0",
+  "description": "NexTexh hackathon files",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
+>>>>>>> eb9c57cffa2cce0c199a6563125f2a01d9e36751
   }
 }

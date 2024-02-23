@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booking</title>
+    <style>
+        /* styles.css */
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('Room_Booking/templates/class.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            height: 100vh; /* Set the body height to fill the viewport */
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(192, 186, 186, 0.466);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select,
+        input,
+        textarea {
+            width: calc(100% - 22px); /* Adjusted width to account for padding and borders */
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.21s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            padding: 15px 20px;
+        }
+
+        .bok {
+            text-align: center;
+            transition: all 1s;
+            z-index: 1;
+        }
+
+        .bok:hover {
+            font-size: 38px;
+        }
+
+        #bookingForm {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Popup container */
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+        }
+
+        /* Close button */
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* Red background for occupied rooms */
+        .popup-container.occupied {
+            background-color: #ffcccc;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="bok">Book your classroom</h1>
+    <form id="bookingForm">
+        <label for="floor">Choose a floor:</label>
+        <select id="floor" name="floor">
+            {% for floor in floors %}
+            <option value="{{ floor }}">Floor {{ floor }}</option>
+            {% endfor %}
+        </select>
+        <label for="room">Choose a room:</label>
+        <select id="room" name="room">
+            <!-- Options will be filled dynamically using JavaScript -->
+        </select>
+        <label for="time_from">Choose a time from:</label>
+        <input type="time" id="time_from" name="time_from">
+        <label for="time_to">Choose a time to:</label>
+        <input type="time" id="time_to" name="time_to">
+        <button type="button" id="checkAvailability">Check Availability</button>
+        <button type="button" id="bookRoom">Book Room</button>
+    </form>
+
+    <!-- Popup container -->
+    <div class="popup-container" id="popupContainer">
+        <span class="popup-close" id="popupClose">&times;</span>
+        <p id="popupMessage"></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const floorSelect = document.getElementById("floor");
+            const roomSelect = document.getElementById("room");
+            const timeFromInput = document.getElementById("time_from");
+            const timeToInput = document.getElementById("time_to");
+            const checkAvailabilityBtn = document.getElementById("checkAvailability");
+            const bookRoomBtn = document.getElementById("bookRoom");
+            const popupContainer = document.getElementById("popupContainer");
+            const popupClose = document.getElementById("popupClose");
+            const popupMessage = document.getElementById("popupMessage");
+
+            // Populate room options based on selected floor
+            floorSelect.addEventListener("change", function () {
+                const floor = floorSelect.value;
+                fetchRooms(floor);
+            });
+
+            // Fetch rooms based on selected floor
+            function fetchRooms(floor) {
+                fetch("/get_rooms", {
+                    method: "POST",
+                    body: JSON.stringify({ floor: floor }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        roomSelect.innerHTML = "";
+                        data.rooms.forEach((room) => {
+                            const option = document.createElement("option");
+                            option.value = room;
+                            option.text = "Room " + room;
+                            roomSelect.appendChild(option);
+                        });
+                    });
+            }
+
+            // Check availability button click event
+            checkAvailabilityBtn.addEventListener("click", function () {
+                const floor = floorSelect.value;
+                const room = roomSelect.value;
+                checkAvailability(floor, room);
+            });
+
+            // Book room button click event
+            bookRoomBtn.addEventListener("click", function () {
+                const floor = floorSelect.value;
+                const room = roomSelect.value;
+                const time_from = timeFromInput.value;
+                const time_to = timeToInput.value;
+                bookRoom(floor, room, time_from, time_to);
+            });
+
+            // Function to check room availability
+            function checkAvailability(floor, room) {
+                fetch("/check_availability", {
+                    method: "POST",
+                    body: new URLSearchParams({ floor: floor, room: room }),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        displayPopup(data.status);
+                        if (data.status === "Occupied") {
+                            popupMessage.textContent += " (Booked from " + data.time_from + " to " + data.time_to + ")";
+                            popupContainer.classList.add("occupied");
+                        } else {
+                            popupContainer.classList.remove("occupied");
+                        }
+                    });
+            }
+
+            // Function to book a room
+            function bookRoom(floor, room, time_from, time_to) {
+                fetch("/book_room", {
+                    method: "POST",
+                    body: new URLSearchParams({ floor: floor, room: room, time_from: time_from, time_to: time_to }),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        displayPopup(data.status + " (Booked from " + data.time_from + " to " + data.time_to + ")");
+                    });
+            }
+
+            // Function to display popup
+            function displayPopup(message) {
+                popupMessage.textContent = message;
+                popupContainer.style.display = "block";
+            }
+
+            // Close popup button click event
+            popupClose.addEventListener("click", function () {
+                popupContainer.style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>

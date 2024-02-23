@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Problem Reporter</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>College Problem Reporter</h1>
+  <form action="/report" method="post">
+    <label for="floor">Floor:</label>
+    <select name="floor" id="floorSelect" required>
+      <!-- Options will be dynamically populated using JavaScript -->
+    </select>
+
+    <label for="classNumber">Class Number:</label>
+    <select name="classNumber" required>
+      <!-- Class options will be dynamically populated based on the selected floor using JavaScript -->
+    </select>
+
+    <label for="problem">Problem:</label>
+    <textarea name="problem" placeholder="Describe the problem" required></textarea>
+
+    <label for="type">Type:</label>
+    <select name="type" required>
+      <option value="technical">Technical</option>
+      <option value="maintenance">Maintenance</option>
+    </select>
+
+    <label for="location">Location:</label>
+    <input type="text" name="location" placeholder="Enter location (e.g., G305)" required>
+
+    <label for="description">Description:</label>
+    <textarea name="description" placeholder="Provide additional details" required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    // Fetch floor numbers from the server
+    fetch('/floors')
+      .then(response => response.json())
+      .then(data => {
+        const floorSelect = document.getElementById('floorSelect');
+
+        // Clear existing options
+        floorSelect.innerHTML = '';
+
+        // Add fetched floor options
+        data.floors.forEach(floor => {
+          const option = document.createElement('option');
+          option.value = floor;
+          option.textContent = `${floor}th Floor`;
+          floorSelect.appendChild(option);
+        });
+
+        // Trigger change event to populate class options based on the selected floor
+        floorSelect.dispatchEvent(new Event('change'));
+      })
+      .catch(error => console.error('Error fetching floor numbers:', error));
+
+    const floorSelect = document.querySelector('select[name="floor"]');
+    const classSelect = document.querySelector('select[name="classNumber"]');
+
+    // Add event listener to floor select
+    floorSelect.addEventListener('change', () => {
+      // Clear existing options
+      classSelect.innerHTML = '';
+
+      // Add class options based on the selected floor
+      const selectedFloor = floorSelect.value;
+      for (let i = 1; i <= 10; i++) {
+        const option = document.createElement('option');
+        option.value = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
+        option.textContent = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
+        classSelect.appendChild(option);
+      }
+    });
+  </script>
+
+</body>
+</html>
