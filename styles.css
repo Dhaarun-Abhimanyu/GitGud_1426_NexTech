@@ -1,0 +1,105 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #8e44ad;
+    color: #000000;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Added box shadow */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+}
+
+#lostForm, #foundItems {
+    margin-top: 20px;
+}
+
+label, input, button, textarea {
+    display: block;
+    margin: 10px 0;
+    box-sizing: border-box;
+    padding: 7px;
+    border-radius: 5px;
+}
+
+#itemName {
+    width: 70%;
+}
+
+button {
+    padding: 10px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background-color: #8e44ad;
+}
+
+button.found {
+    background-color: #3498db;
+}
+
+button.found:hover {
+    background-color: #2980b9;
+}
+
+#foundItems {
+    border-top: 2px solid #fff;
+    padding-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    background-color: #ecf0f1;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+li:hover {
+    background-color: #d2d7db;
+}
+
+.status {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+li:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#description{
+    width: 80%;
+}
+
+
+
+
+
