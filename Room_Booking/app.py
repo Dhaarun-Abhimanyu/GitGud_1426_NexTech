@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/Room_Booking//static')
 
 # Read the Excel file
 rooms_data = pd.read_excel("rooms.xlsx")
