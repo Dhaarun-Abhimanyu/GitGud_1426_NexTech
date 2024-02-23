@@ -1,22 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Problem Reporter</title>
-  <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Problem Reporter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('peakpx.jpg'); /* Adjust the path to your image */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff99;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.4s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            padding : 10px 20px
+        }
+        .title{
+          font-size: 35px;
+          color: white;
+          transition: all 0.5s;
+        }
+        .title:hover{
+          font-size: 43px;
+        }
+        .text{
+          font-weight:bolder;
+        }
+    </style>
 </head>
 <body>
-  <h1>College Problem Reporter</h1>
-  <form action="/report" method="post">
+<h1 class="title">Report Problems</h1>
+<form action="/report" method="post">
+  <div class="text">
     <label for="floor">Floor:</label>
     <select name="floor" id="floorSelect" required>
-      <!-- Options will be dynamically populated using JavaScript -->
+        <!-- Options will be dynamically populated using JavaScript -->
     </select>
 
     <label for="classNumber">Class Number:</label>
     <select name="classNumber" required>
-      <!-- Class options will be dynamically populated based on the selected floor using JavaScript -->
+        <!-- Class options will be dynamically populated based on the selected floor using JavaScript -->
     </select>
 
     <label for="problem">Problem:</label>
@@ -24,8 +94,8 @@
 
     <label for="type">Type:</label>
     <select name="type" required>
-      <option value="technical">Technical</option>
-      <option value="maintenance">Maintenance</option>
+        <option value="technical">Technical</option>
+        <option value="maintenance">Maintenance</option>
     </select>
 
     <label for="location">Location:</label>
@@ -33,51 +103,52 @@
 
     <label for="description">Description:</label>
     <textarea name="description" placeholder="Provide additional details" required></textarea>
+    </div>
 
     <button type="submit">Submit</button>
-  </form>
+</form>
 
-  <script>
+<script>
     // Fetch floor numbers from the server
     fetch('/floors')
-      .then(response => response.json())
-      .then(data => {
-        const floorSelect = document.getElementById('floorSelect');
+        .then(response => response.json())
+        .then(data => {
+            const floorSelect = document.getElementById('floorSelect');
 
-        // Clear existing options
-        floorSelect.innerHTML = '';
+            // Clear existing options
+            floorSelect.innerHTML = '';
 
-        // Add fetched floor options
-        data.floors.forEach(floor => {
-          const option = document.createElement('option');
-          option.value = floor;
-          option.textContent = `${floor}th Floor`;
-          floorSelect.appendChild(option);
-        });
+            // Add fetched floor options
+            data.floors.forEach(floor => {
+                const option = document.createElement('option');
+                option.value = floor;
+                option.textContent = `${floor}th Floor`;
+                floorSelect.appendChild(option);
+            });
 
-        // Trigger change event to populate class options based on the selected floor
-        floorSelect.dispatchEvent(new Event('change'));
-      })
-      .catch(error => console.error('Error fetching floor numbers:', error));
+            // Trigger change event to populate class options based on the selected floor
+            floorSelect.dispatchEvent(new Event('change'));
+        })
+        .catch(error => console.error('Error fetching floor numbers:', error));
 
     const floorSelect = document.querySelector('select[name="floor"]');
     const classSelect = document.querySelector('select[name="classNumber"]');
 
     // Add event listener to floor select
     floorSelect.addEventListener('change', () => {
-      // Clear existing options
-      classSelect.innerHTML = '';
+        // Clear existing options
+        classSelect.innerHTML = '';
 
-      // Add class options based on the selected floor
-      const selectedFloor = floorSelect.value;
-      for (let i = 1; i <= 10; i++) {
-        const option = document.createElement('option');
-        option.value = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
-        option.textContent = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
-        classSelect.appendChild(option);
-      }
+        // Add class options based on the selected floor
+        const selectedFloor = floorSelect.value;
+        for (let i = 1; i <= 10; i++) {
+            const option = document.createElement('option');
+            option.value = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
+            option.textContent = `G${selectedFloor}${(i < 10 ? '0' : '') + i}`;
+            classSelect.appendChild(option);
+        }
     });
-  </script>
+</script>
 
 </body>
 </html>
