@@ -8,9 +8,7 @@ rooms_data = pd.read_excel("Room_Booking\\rooms.xlsx")
 
 @app.route("/")
 def index():
-    booked_rooms = rooms_data[rooms_data["Occupancy Status"] == "Occupied"][["Floor", "Room Number"]]
-    booked_rooms_list = [f"Floor {row['Floor']}, Room {row['Room Number']}" for _, row in booked_rooms.iterrows()]
-    return render_template("index.html", floors=sorted(rooms_data["Floor"].unique()), booked_rooms=booked_rooms_list)
+    return render_template("index.html", floors=sorted(rooms_data["Floor"].unique()))
 
 @app.route("/get_rooms", methods=["POST"])
 def get_rooms():
@@ -38,11 +36,12 @@ def check_availability():
             time_to_str = str(time_to)
 
         if status == "Occupied":
-            return jsonify({"status": "Room already booked", "time_from": time_from_str, "time_to": time_to_str})
-        else:
             return jsonify({"status": status, "time_from": time_from_str, "time_to": time_to_str})
+        else:
+            return jsonify({"status": status})
     else:
         return jsonify({"status": "Room not found", "time_from": "N/A", "time_to": "N/A"})
+
 
 @app.route("/book_room", methods=["POST"])
 def book_room():
@@ -53,22 +52,20 @@ def book_room():
 
     # Check if the room is available
     room_data = rooms_data[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room)]
-    if not room_data.empty:
-        status = room_data["Occupancy Status"].values[0]
-        if status == "Occupied":
-            return jsonify({"status": "Room already booked", "time_from": "N/A", "time_to": "N/A"})
-        else:
-            # Update room status and time slots
-            rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "Occupancy Status"] = "Occupied"
-            rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "time_from"] = time_from
-            rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "time_to"] = time_to
+    status = room_data["Occupancy Status"].values[0]
 
-            # Save the updated data back to the Excel file
-            rooms_data.to_excel("rooms.xlsx", index=False)
-
-            return jsonify({"status": "Room booked", "time_from": time_from, "time_to": time_to})
+    if status == "Occupied":
+        return jsonify({"status": "Room already booked", "time_from": time_from, "time_to": time_to})
     else:
-        return jsonify({"status": "Room not found", "time_from": "N/A", "time_to": "N/A"})
+        # Update room status and time slots
+        rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "Occupancy Status"] = "Occupied"
+        rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "time_from"] = time_from
+        rooms_data.loc[(rooms_data["Floor"] == floor) & (rooms_data["Room Number"] == room), "time_to"] = time_to
+
+        # Save the updated data back to the Excel file
+        rooms_data.to_excel("rooms.xlsx", index=False)
+
+        return jsonify({"status": "Room booked", "time_from": time_from, "time_to": time_to})
 
 if __name__ == "__main__":
     app.run(debug=True)
