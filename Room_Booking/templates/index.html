@@ -113,6 +113,38 @@
             background-color: #ffcccc;
             color: #ff0000;
         }
+
+        /* Booked rooms dropdown */
+        .booked-rooms-dropdown {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            margin: 0 auto;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            max-height: 0;
+        }
+
+        .booked-rooms-dropdown.open {
+            max-height: 500px; /* Set a value larger than the expected height */
+        }
+
+        .booked-rooms-dropdown h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .booked-rooms-dropdown ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .booked-rooms-dropdown li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -142,6 +174,15 @@
         <p id="popupMessage"></p>
     </div>
 
+    <!-- Booked rooms dropdown -->
+    <p></p>
+    <div class="booked-rooms-dropdown" id="bookedRoomsDropdown">
+        <h2>Booked ClassRooms</h2>
+        <ul id="bookedRoomsList">
+            <!-- Booked rooms will be added dynamically using JavaScript -->
+        </ul>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const floorSelect = document.getElementById("floor");
@@ -153,6 +194,7 @@
             const popupContainer = document.getElementById("popupContainer");
             const popupClose = document.getElementById("popupClose");
             const popupMessage = document.getElementById("popupMessage");
+            const bookedRoomsDropdown = document.getElementById("bookedRoomsDropdown");
 
             // Populate room options based on selected floor
             floorSelect.addEventListener("change", function () {
@@ -209,7 +251,7 @@
                     .then((response) => response.json())
                     .then((data) => {
                         displayPopup(data.status);
-                        if (data.status === "Occupied") {
+                        if (data.status === "Occupied" || data.status === "Room already booked") {
                             popupMessage.textContent += " (Booked from " + data.time_from + " to " + data.time_to + ")";
                             popupContainer.classList.add("occupied");
                         } else {
@@ -230,6 +272,9 @@
                     .then((response) => response.json())
                     .then((data) => {
                         displayPopup(data.status + " (Booked from " + data.time_from + " to " + data.time_to + ")");
+                        if (data.status === "Room booked") {
+                            addBookedRoomToList(room);
+                        }
                     });
             }
 
@@ -242,6 +287,19 @@
             // Close popup button click event
             popupClose.addEventListener("click", function () {
                 popupContainer.style.display = "none";
+            });
+
+            // Function to add booked room to the list
+            function addBookedRoomToList(room) {
+                const bookedRoomsList = document.getElementById("bookedRoomsList");
+                const listItem = document.createElement("li");
+                listItem.textContent = "Room " + room;
+                bookedRoomsList.appendChild(listItem);
+            }
+
+            // Toggle booked rooms dropdown
+            document.getElementById("bookedRoomsDropdown").addEventListener("click", function () {
+                this.classList.toggle("open");
             });
         });
     </script>
