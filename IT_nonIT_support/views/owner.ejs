@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/owner.css">
+  <title>Owner Page</title>
+</head>
+<body>
+  <h1>Owner Page</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Floor</th>
+        <th>Class Number</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% problems.forEach(problem => { %>
+        <tr>
+          <td><%= problem.floor %></td>
+          <td><%= problem.classNumber %></td>
+          <td><%= problem.type %></td>
+          <td><%= problem.location %></td>
+          <td><%= problem.description %></td>
+          <td><%= problem.status %></td>
+          <td>
+            <form action="/update-status/<%= problem._id %>" method="post">
+              <select name="status">
+                <option value="Pending">Pending</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Solved">Solved</option>
+              </select>
+              <button type="submit">Update</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>
