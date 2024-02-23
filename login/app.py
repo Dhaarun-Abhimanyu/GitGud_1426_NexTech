@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 
-app = Flask(__name__)
 app = Flask(__name__, static_folder='static')
 
 # Path to the Excel file
@@ -52,4 +51,5 @@ def signup_process():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Run the Flask app on port 5001
+    app.run(debug=True, port=5001)
