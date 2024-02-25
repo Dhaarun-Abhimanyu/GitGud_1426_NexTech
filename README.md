@@ -2,12 +2,7 @@
 NexTexh hackathon files
 
 Steps to run the website:
-Run the app.py in the login folder (do not run form vscode)
-Before running app.py run the following files:
-*app.js from the IT_nonIT_support folder using "node app.js"
-*server.js from the library_acces folder using "node server.js"
-*server.js from the lost_and_found folder using "node server.js"
-*app.py from the Room_Booking folder using "py app.py"
+Run the app.py in the login folder using VSCODE
 
 The support functionality:
 dependencies - node, express, ejs, mongodb, etc
