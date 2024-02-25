@@ -9,13 +9,18 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-image: url('login/static/image.jpg'); /* Adjust the path to your image */
+            background-size: cover;
+            background-position: center;
+            position: relative;
         }
-
         .top-bar {
-            background-color: #f6d88b;
+            background-color: rgba(246, 216, 139, 0.5); /* Transparent background color */
             padding: 10px;
             text-align: center;
+            position: absolute;
+            width: 100%;
+            z-index: 1; /* Ensure it's above the image */
         }
 
         .button-container {
@@ -49,6 +54,7 @@
             position: relative;
             text-align: center;
             color: rgb(19, 18, 18); /* Text color */
+            z-index: 0; /* Ensure it's below the top bar */
         }
         .overlay-text {
             position: absolute;
@@ -70,6 +76,12 @@
             font-size: 70px;
             color: white;
         }
+        .additional-info {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -84,19 +96,18 @@
         </div>
     </div>
     <div class="image-container">
+        <img src='login/static/image.jpg'>
         <!-- Image -->
-        <img src="image.jpg" alt="University Cartoon Image">
-        
-        <!-- Text -->
-        <br>
-        <div class="overlay-text"><samp class="hov">W</samp><samp class="hov">E</samp><samp class="hov">L</samp><samp class="hov">C</samp><samp class="hov">O</samp><samp class="hov">M</samp><samp class="hov">E</samp><samp class="hov"> </samp><samp class="hov">T</samp><samp class="hov">O</samp><samp class="hov"> </samp><samp class="hov">P</samp><samp class="hov">S</samp><samp class="hov">G</samp><samp class="hov"> </samp><samp class="hov">A</samp><samp class="hov">S</samp><samp class="hov">S</samp><samp class="hov">I</samp><samp class="hov">S</samp><samp class="hov">T</samp></div>
     </div>
-    <div class="text">
-        GitGud
+        <!-- Text -->
+        <div class="overlay-text">
+            <samp class="hov">W</samp><samp class="hov">E</samp><samp class="hov">L</samp><samp class="hov">C</samp><samp class="hov">O</samp><samp class="hov">M</samp><samp class="hov">E</samp><samp class="hov"> </samp><samp class="hov">T</samp><samp class="hov">O</samp><samp class="hov"> </samp><samp class="hov">P</samp><samp class="hov">S</samp><samp class="hov">G</samp><samp class="hov"> </samp><samp class="hov">A</samp><samp class="hov">S</samp><samp class="hov">S</samp><samp class="hov">I</samp><samp class="hov">S</samp><samp class="hov">T</samp>
+        </div>
+    </div>
+    <div class="additional-info">
+        Website made with love by GitGud
+        <br>
+        Copyright &copy; 2024
     </div>
 </body>
 </html>
-
-
-
-

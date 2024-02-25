@@ -3,10 +3,10 @@ import pandas as pd
 import subprocess
 import platform
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__,static_url_path='/login//static')
 
 # Path to the Excel file
-excel_file_path = "login\\testdata.xlsx"
+excel_file_path = "login\\credentials.xlsx"
 
 # Load the Excel file into a Pandas DataFrame
 df = pd.read_excel(excel_file_path)
@@ -98,7 +98,7 @@ def signup_process():
 
 @app.route('/homepage')
 def homepage():
-    return send_from_directory('static', 'homepage.html')
+    return render_template('homepage.html')
 
 if __name__ == '__main__':
     # Run the setup function
