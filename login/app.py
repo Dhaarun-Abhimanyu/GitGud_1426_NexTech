@@ -6,7 +6,7 @@ import platform
 app = Flask(__name__, static_url_path='')
 
 # Path to the Excel file
-excel_file_path = "NexTech\\login\\testdata.xlsx"
+excel_file_path = "login\\testdata.xlsx"
 
 # Load the Excel file into a Pandas DataFrame
 df = pd.read_excel(excel_file_path)
@@ -35,10 +35,10 @@ def setup():
     if not setup_done:
         # List of commands and directories
         commands_directories = [
-            ('node app.js', 'NexTech\\IT_nonIT_support'),
-            ('node server.js', 'NexTech\\library_acces'),
-            ('node server.js', 'NexTech\\lost_and_found'),
-            ('py app.py', 'NexTech\\Room_Booking')# Example command and directory 1
+            ('node app.js', 'IT_nonIT_support'),
+            ('node server.js', 'library_acces'),
+            ('node server.js', 'lost_and_found'),
+            ('py app.py', 'Room_Booking')# Example command and directory 1
         ]
         
         # Execute commands in specified directories
