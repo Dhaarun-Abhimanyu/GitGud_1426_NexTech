@@ -65,19 +65,6 @@
             background-color: #45a049;
             padding: 15px 20px;
         }
-
-        .bok {
-            text-align: center;
-            z-index: 1;
-            font-size: 40px;
-            color: black;
-            transition: all 1s;
-        }
-
-        .bok:hover {
-            font-size: 46px;
-        }
-
         #bookingForm {
         position: relative;
         z-index: 1;
@@ -150,10 +137,21 @@
         .booked-rooms-dropdown li {
             margin-bottom: 5px;
         }
+        .title{
+          font-size: 35px;
+          color: rgb(33, 31, 31);
+          transition: all 0.5s;
+        }
+        .title:hover{
+          font-size: 43px;
+        }
+        .text{
+          font-weight:bolder;
+        }
     </style>
 </head>
 <body>
-    <h1 class="bok">Book your classroom</h1>
+    <h1 class="title">Book your classroom</h1>
     <form id="bookingForm">
         <label for="floor"><b>Choose a floor:</b></label>
         <select id="floor" name="floor">
